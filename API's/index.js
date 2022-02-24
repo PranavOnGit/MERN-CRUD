@@ -1,17 +1,20 @@
-// const express = require('express');
 import express from 'express';
-import { get } from 'http';
 import mongoose from 'mongoose';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+
+
+import route from './Routes/routes.js';
 
 const app = express();
-const route = express.Router();
-route.get('/', (request, response) => {
-    response.status(200).json('connected to MONGO and able to connect with API');
-});
-app.use('/users', route);
-
 const PORT = 8000;
 const URL = 'mongodb+srv://tasksontable:tasksontable2022@clusterzero.qpxtt.mongodb.net/ClusterZero?retryWrites=true&w=majority';
+
+app.use(bodyParser.json({ extended : true }));
+app.use(bodyParser.urlencoded({ extended : true }));
+app.use(cors());
+app.use('/users', route);
+
 
 mongoose.connect(URL, { usenewurlparser : true, useunifiedtopology : true}).then(() => {
     app.listen(PORT, () => {
@@ -21,5 +24,5 @@ mongoose.connect(URL, { usenewurlparser : true, useunifiedtopology : true}).then
     console.log('Error : ', error.message);
 });
 
-mongoose.disconnect();
+// mongoose.disconnect();
 
